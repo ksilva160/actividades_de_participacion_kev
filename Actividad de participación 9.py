@@ -24,41 +24,49 @@ class DatosMeteorologicos:
         grados_a_direccion = {v: k for k, v in direccion_a_grados.items()}
 
         # Leer el archivo
-        with open(self.nombre_archivo, 'r') as file:
-            for line in file:
-                # Procesar cada línea para obtener los datos relevantes
-                if "Temperatura" in line:
-                    temperaturas.append(float(line.split(":")[1].strip()))
-                elif "Humedad" in line:
-                    humedades.append(float(line.split(":")[1].strip()))
-                elif "Presion" in line:
-                    presiones.append(float(line.split(":")[1].strip()))
-                elif "Viento" in line:
-                    velocidad, direccion = line.split(":")[1].strip().split(",")
-                    velocidades_viento.append(float(velocidad))
-                    direcciones_viento.append(direccion)
+        try:
+            with open(self.nombre_archivo, 'r') as file:
+                for line in file:
+                    # Procesar cada línea para obtener los datos relevantes
+                    if "Temperatura" in line:
+                        temperaturas.append(float(line.split(":")[1].strip()))
+                    elif "Humedad" in line:
+                        humedades.append(float(line.split(":")[1].strip()))
+                    elif "Presion" in line:
+                        presiones.append(float(line.split(":")[1].strip()))
+                    elif "Viento" in line:
+                        velocidad, direccion = line.split(":")[1].strip().split(",")
+                        velocidades_viento.append(float(velocidad))
+                        direcciones_viento.append(direccion.strip())
         
-        # Calcular promedios
-        temperatura_promedio = sum(temperaturas) / len(temperaturas)
-        humedad_promedio = sum(humedades) / len(humedades)
-        presion_promedio = sum(presiones) / len(presiones)
-        velocidad_viento_promedio = sum(velocidades_viento) / len(velocidades_viento)
+        except FileNotFoundError:
+            print(f"Error: El archivo '{self.nombre_archivo}' no se encuentra.")
+            return (0, 0, 0, 0, "N/A")
+        except Exception as e:
+            print(f"Error al procesar el archivo: {e}")
+            return (0, 0, 0, 0, "N/A")
+        
+        # Calcular promedios solo si las listas no están vacías
+        temperatura_promedio = sum(temperaturas) / len(temperaturas) if temperaturas else 0
+        humedad_promedio = sum(humedades) / len(humedades) if humedades else 0
+        presion_promedio = sum(presiones) / len(presiones) if presiones else 0
+        velocidad_viento_promedio = sum(velocidades_viento) / len(velocidades_viento) if velocidades_viento else 0
         
         # Convertir direcciones de viento a grados y calcular la dirección predominante
         grados = [direccion_a_grados[dir] for dir in direcciones_viento if dir in direccion_a_grados]
-        promedio_grados = sum(grados) / len(grados)
         
-        # Encontrar la dirección más cercana al promedio calculado
-        direccion_predominante = min(grados_a_direccion.keys(), key=lambda x: abs(x - promedio_grados))
-        direccion_predominante_str = grados_a_direccion[direccion_predominante]
+        if grados:
+            promedio_grados = sum(grados) / len(grados)
+            # Encontrar la dirección más cercana al promedio calculado
+            direccion_predominante = min(grados_a_direccion.keys(), key=lambda x: abs(x - promedio_grados))
+            direccion_predominante_str = grados_a_direccion[direccion_predominante]
+        else:
+            direccion_predominante_str = "N/A"
 
         return (temperatura_promedio, humedad_promedio, presion_promedio, velocidad_viento_promedio, direccion_predominante_str)
 
-# Ejemplo de uso
+
 datos = DatosMeteorologicos('datos.txt')
 estadisticas = datos.procesar_datos()
 print(f"Temperatura promedio: {estadisticas[0]:.2f} °C")
-print(f"Humedad promedio: {estadisticas[1]:.2f} %")
-print(f"Presión promedio: {estadisticas[2]:.2f} hPa")
-print(f"Velocidad promedio del viento: {estadisticas[3]:.2f} km/h")
-print(f"Dirección predominante del viento: {estadisticas[4]}")
+print(f"Humedad promedio: {estadisticas[1]:.
