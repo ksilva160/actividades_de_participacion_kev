@@ -1,5 +1,12 @@
-from softwaregimnasio.view.console import UIConsola
+from modelo.excepciones import UsuarioExistenteError, UsuarioNoEncontradoError, MembresiaInactivaError
+from view.interfaz_grafica import InterfazGrafica
 
 if __name__ == "__main__":
-    consola = UIConsola()
-    consola.ejecutar_app()
+    # Inicializa la interfaz gráfica
+    import tkinter as tk
+    
+    root = tk.Tk()
+    interfaz = InterfazGrafica(root)
+    root.mainloop()
+
+

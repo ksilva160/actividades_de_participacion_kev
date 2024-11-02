@@ -1,8 +1,14 @@
+from usuario import Usuario
+from excepciones import UsuarioExistenteError, UsuarioNoEncontradoError
+
 class Gimnasio:
     def __init__(self):
         self.usuarios = []
     
     def registrar_usuario(self, nombre, correo, membresia, t_documento, n_documento):
+        for usuario in self.usuarios:
+            if usuario.n_documento == n_documento:
+                raise UsuarioExistenteError()
         usuario = Usuario(nombre, correo, membresia, t_documento, n_documento)
         self.usuarios.append(usuario)
         return usuario
@@ -11,7 +17,7 @@ class Gimnasio:
         for usuario in self.usuarios:
             if usuario.n_documento == n_documento:
                 return usuario
-        return None
+        raise UsuarioNoEncontradoError()
     
     def generar_informe(self, usuario):
         informe = []

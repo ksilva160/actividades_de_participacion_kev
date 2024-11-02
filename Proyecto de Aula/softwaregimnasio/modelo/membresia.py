@@ -12,3 +12,4 @@ class Membresia:
     def cancelar(self):
         self.estado = "Inactivo"
 
+

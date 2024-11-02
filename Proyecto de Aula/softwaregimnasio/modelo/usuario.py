@@ -1,3 +1,8 @@
+from membresia import Membresia
+from medidas import Medidas
+from asistencia import Asistencia
+
+
 class Usuario:
     def __init__(self, nombre: str, correo, membresia, t_documento, n_documento):
         self.nombre = nombre
