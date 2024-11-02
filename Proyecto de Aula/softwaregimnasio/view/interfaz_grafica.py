@@ -59,7 +59,7 @@ class InterfazGrafica:
             messagebox.showinfo("Éxito", "Usuario registrado con éxito.")
             self.popup_registrar.destroy()
         except UsuarioExistenteError as e:
-            messagebox.showerror("Error", e.mensaje)
+            messagebox.showerror("Error", str(e))  # Asegúrate de que e tenga un mensaje
 
     def consultar_usuario(self):
         self.popup_consultar = tk.Toplevel(self.master)
@@ -75,7 +75,8 @@ class InterfazGrafica:
         n_documento = self.n_documento_entry.get()
         try:
             usuario = self.gimnasio.consultar_usuario(n_documento)
-            messagebox.showinfo("Usuario Encontrado", f"Nombre: {usuario.nombre}\nCorreo: {usuario.correo}")
+            informe = self.gimnasio.generar_informe(usuario)
+            messagebox.showinfo("Usuario Encontrado", informe)
             self.popup_consultar.destroy()
         except UsuarioNoEncontradoError as e:
-            messagebox.showerror("Error", e.mensaje)
+            messagebox.showerror("Error", str(e)) 
