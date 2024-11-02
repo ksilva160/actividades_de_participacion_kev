@@ -1,8 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 from modelo.gimnasio import Gimnasio
-from modelo.excepciones import UsuarioExistenteError, UsuarioNoEncontradoError, MembresiaInactivaError
-
+from modelo.excepciones import UsuarioExistenteError, UsuarioNoEncontradoError
 
 class InterfazGrafica:
     def __init__(self, master):
@@ -66,4 +65,17 @@ class InterfazGrafica:
         self.popup_consultar = tk.Toplevel(self.master)
         self.popup_consultar.title("Consultar Usuario")
 
-        tk.Label
+        tk.Label(self.popup_consultar, text="Número de Documento:").pack()
+        self.n_documento_entry = tk.Entry(self.popup_consultar)
+        self.n_documento_entry.pack()
+
+        tk.Button(self.popup_consultar, text="Consultar", command=self.mostrar_usuario).pack()
+
+    def mostrar_usuario(self):
+        n_documento = self.n_documento_entry.get()
+        try:
+            usuario = self.gimnasio.consultar_usuario(n_documento)
+            messagebox.showinfo("Usuario Encontrado", f"Nombre: {usuario.nombre}\nCorreo: {usuario.correo}")
+            self.popup_consultar.destroy()
+        except UsuarioNoEncontradoError as e:
+            messagebox.showerror("Error", e.mensaje)

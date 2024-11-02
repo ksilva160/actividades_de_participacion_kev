@@ -1,5 +1,8 @@
-from usuario import Usuario
-from excepciones import UsuarioExistenteError, UsuarioNoEncontradoError
+from modelo.usuario import Usuario
+from modelo.membresia import Membresia
+from modelo.medidas import Medidas
+from modelo.asistencia import Asistencia
+from modelo.excepciones import UsuarioExistenteError, UsuarioNoEncontradoError
 
 class Gimnasio:
     def __init__(self):

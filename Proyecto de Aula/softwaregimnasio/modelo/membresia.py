@@ -6,9 +6,9 @@ class Membresia:
         self.estado = "Activo"
 
     def congelar(self, fecha_congelar):
-        self.estado = "Congelar"
+        self.estado = "Congelado"
         self.fecha_congelar = fecha_congelar
-    
+
     def cancelar(self):
         self.estado = "Inactivo"
 
